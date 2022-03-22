@@ -16,10 +16,10 @@ if __name__ == '__main__':
     # Les NB_EMP employés internes
     df = pd.DataFrame()
     df["Niveau Hierarchique"] = get_rand_arr(1, 3, NB_EMP)
-    df["Competences Clees"] = get_list_of_rand_arr(1, 20, NB_EMP)
+    df["Competences Clees"] = get_list_of_rand_arr(1, 10, NB_EMP)
     df["Autres Competences"] = get_list_of_rand_arr(1, 10, NB_EMP, 1, 5)
     df["Niveau Education"] = get_rand_arr(1, 7, NB_EMP)
-    df["Titre Professionnel"] = get_rand_arr(1, 6, NB_EMP)
+    df["Titre Professionnel"] = get_rand_arr(0, 6, NB_EMP)
     df["Niveau Fr"] = get_rand_arr(1, 4, NB_EMP)
     df["Niveau En"] = get_rand_arr(1, 4, NB_EMP)
     df["Autres Langues"] = get_list_of_rand_arr(1, 10, NB_EMP, 1, 2)
@@ -30,10 +30,10 @@ if __name__ == '__main__':
     # Les NB_POSTES Postes disponibles
     df = pd.DataFrame()
     df["Niveau Hierarchique"] = get_rand_arr(1, 3, NB_POSTES)
-    df["Competences Clees"] = get_list_of_rand_arr(1, 20, NB_POSTES, 1, 5)
+    df["Competences Clees"] = get_list_of_rand_arr(1, 10, NB_POSTES, 1, 5)
     df["Autres Competences"] = get_list_of_rand_arr(1, 10, NB_POSTES, 1, 5)
     df["Niveau Education"] = get_rand_arr(1, 7, NB_POSTES)
-    df["Titre Professionnel"] = get_rand_arr(1, 6, NB_POSTES) # 95% de zéros
+    df["Titre Professionnel"] = get_rand_arr(0, 6, NB_POSTES) # 95% de zéros
     df["Niveau Fr"] = get_rand_arr(1, 4, NB_POSTES)
     df["Niveau En"] = get_rand_arr(1, 4, NB_POSTES)
     df["Autres Langues"] = get_list_of_rand_arr(1, 10, NB_POSTES, 1, 1)   
