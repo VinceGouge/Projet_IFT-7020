@@ -1,5 +1,5 @@
 include "employes_1000.dzn";
-include "postes_2.dzn";
+include "postes_100.dzn";
 include "alldifferent.mzn";
 
 %%%%%%%%%%%%%%
