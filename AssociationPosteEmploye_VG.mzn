@@ -1,5 +1,5 @@
-include "postes_10.dzn";
-include "employes_900.dzn";
+include "postes_4.dzn";
+include "employes_100000.dzn";
 include "alldifferent.mzn";
 
 %%%%%%%%%%%%%%
@@ -48,12 +48,12 @@ array[POSTES, DIX_COLONNES] of var 0..1: AUTRES_COMP_Match; % Autres compétense
 array[POSTES, DIX_COLONNES] of var 0..1: AUTRES_LANGUES_Match; % Autres langues en commun entre le poste et l'employé associé au poste
 
 % Variable de pénalité sur les différentes contraintes "soft"
-array[POSTES] of var int: Penalite_COMP_CLEES;
-array[POSTES] of var int: Penalite_AUTRES_COMP;
-array[POSTES] of var int: Penalite_AUTRES_LANGUES;
-array[POSTES] of var int: Penalite_Education;
-array[POSTES] of var int: Penalite_FR;
-array[POSTES] of var int: Penalite_EN;
+array[POSTES] of var -10..10: Penalite_COMP_CLEES;
+array[POSTES] of var -10..10: Penalite_AUTRES_COMP;
+array[POSTES] of var -10..10: Penalite_AUTRES_LANGUES;
+array[POSTES] of var -10..10: Penalite_Education;
+array[POSTES] of var -10..10: Penalite_FR;
+array[POSTES] of var -10..10: Penalite_EN;
 
 
 %%%%%%%%%%%%%%%
@@ -75,15 +75,16 @@ constraint forall(p in POSTES) (sum(c in DIX_COLONNES) (COMP_CLEES_Match[p, c]) 
 constraint forall(p in POSTES) (sum(c in DIX_COLONNES) (AUTRES_COMP_Match[p, c]) + Penalite_AUTRES_COMP[p] = sum(c in DIX_COLONNES) (AUTRES_COMP_P[p, c]));
 constraint forall(p in POSTES) (sum(c in DIX_COLONNES) (AUTRES_LANGUES_Match[p, c]) + Penalite_AUTRES_LANGUES[p] = sum(c in DIX_COLONNES) (AUTRES_LANGUES_P[p, c]));
 constraint forall(p in POSTES) (NIVEAU_EDUCATION_E[Match[p], 1] + Penalite_Education[p] = NIVEAU_EDUCATION_P[p, 1]);
-constraint forall(p in POSTES) (NIVEAU_FR_E[Match[p], 1] + Penalite_FR[p] = NIVEAU_FR_P[p, 1]);
-constraint forall(p in POSTES) (NIVEAU_EN_E[Match[p], 1] + Penalite_EN[p] = NIVEAU_EN_P[p, 1]);
+constraint forall(p in POSTES) (NIVEAU_FR_E[Match[p], 1] + Penalite_FR[p] >= NIVEAU_FR_P[p, 1]);
+constraint forall(p in POSTES) (NIVEAU_EN_E[Match[p], 1] + Penalite_EN[p] >= NIVEAU_EN_P[p, 1]);
 
 
 
 %%%%%%%%%%%%
 % Objectif %
 %%%%%%%%%%%%
-solve minimize sum(p in POSTES)(abs(Penalite_COMP_CLEES[p])) + sum(p in POSTES)(abs(Penalite_Education[p])) + sum(p in POSTES)(abs(Penalite_FR[p])) + sum(p in POSTES)(abs(Penalite_EN[p])) + sum(p in POSTES)(abs(Penalite_AUTRES_COMP[p])) + sum(p in POSTES)(abs(Penalite_AUTRES_LANGUES[p]));
+
+solve minimize sum(p in POSTES) (abs(Penalite_COMP_CLEES[p]) + abs(Penalite_AUTRES_COMP[p]) + abs(Penalite_AUTRES_LANGUES[p]) + abs(Penalite_Education[p]) + abs(Penalite_FR[p]) + abs(Penalite_EN[p]));
 
 
 %%%%%%%%%%
