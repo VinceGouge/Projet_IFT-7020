@@ -1,5 +1,5 @@
-include "postes_4.dzn";
-include "employes_100000.dzn";
+include "postes_6.dzn";
+include "employes_500.dzn";
 include "alldifferent.mzn";
 
 %%%%%%%%%%%%%%
@@ -66,9 +66,9 @@ constraint forall(p in POSTES) ([TITRE_PROFESSIONNEL_E[Match[p], c] | c in UNE_C
 constraint alldifferent(Match);
 
 % Vecteurs des compétences clées, autres compétence et autres langues en commun entre le poste et l'employé assigné au poste
-constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (COMP_CLEES_P[p, c] = 1 /\ COMP_CLEES_E[Match[p], c] = 1 -> COMP_CLEES_Match[p, c] = 1));
-constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (AUTRES_COMP_P[p, c] = 1 /\ AUTRES_COMP_E[Match[p], c] = 1 -> AUTRES_COMP_Match[p, c] = 1));
-constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (AUTRES_LANGUES_P[p, c] = 1 /\ AUTRES_LANGUES_E[Match[p], c] = 1 -> AUTRES_LANGUES_Match[p, c] = 1));
+constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (COMP_CLEES_P[p, c] = 1 /\ COMP_CLEES_E[Match[p], c] = 1 <-> COMP_CLEES_Match[p, c] = 1));
+constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (AUTRES_COMP_P[p, c] = 1 /\ AUTRES_COMP_E[Match[p], c] = 1 <-> AUTRES_COMP_Match[p, c] = 1));
+constraint forall(p in POSTES) (forall(c in DIX_COLONNES) (AUTRES_LANGUES_P[p, c] = 1 /\ AUTRES_LANGUES_E[Match[p], c] = 1 <-> AUTRES_LANGUES_Match[p, c] = 1));
 
 % Contraintes "soft" devant être satisfaites le plus possible mais admettant une certaine pénalité
 constraint forall(p in POSTES) (sum(c in DIX_COLONNES) (COMP_CLEES_Match[p, c]) + Penalite_COMP_CLEES[p] = sum(c in DIX_COLONNES) (COMP_CLEES_P[p, c]));
@@ -92,7 +92,4 @@ solve minimize sum(p in POSTES) (abs(Penalite_COMP_CLEES[p]) + abs(Penalite_AUTR
 %%%%%%%%%%
 
 output ["\([Match[p] | p in POSTES])" ++ "\n" ++
-        "\([Penalite_Education[p] | p in POSTES])" ++ "\n" ++
-        "\([Penalite_FR[p] | p in POSTES])" ++ "\n" ++
-        "\([Penalite_EN[p] | p in POSTES])" ++ "\n" ++
         "\(sum(p in POSTES)(abs(Penalite_COMP_CLEES[p])) + sum(p in POSTES)(abs(Penalite_Education[p])) + sum(p in POSTES)(abs(Penalite_FR[p])) + sum(p in POSTES)(abs(Penalite_EN[p])) + sum(p in POSTES)(abs(Penalite_AUTRES_COMP[p])) + sum(p in POSTES)(abs(Penalite_AUTRES_LANGUES[p])))"]
